@@ -205,6 +205,7 @@ type AzureResourceManagerClient interface {
 	ListAzureManagementGroups(ctx context.Context, skipToken string) <-chan AzureResult[azure.ManagementGroup]
 	ListAzureManagementGroupDescendants(ctx context.Context, groupId string, top int32) <-chan AzureResult[azure.DescendantInfo]
 	ListAzureResourceGroups(ctx context.Context, subscriptionId string, params query.RMParams) <-chan AzureResult[azure.ResourceGroup]
+	ListAzureRBACRoleDefinitions(ctx context.Context, subscriptionId string) <-chan AzureResult[azure.RBACRoleDefinition]
 	ListAzureSubscriptions(ctx context.Context) <-chan AzureResult[azure.Subscription]
 	ListAzureVirtualMachines(ctx context.Context, subscriptionId string, params query.RMParams) <-chan AzureResult[azure.VirtualMachine]
 	ListAzureSpringApps(ctx context.Context, subscriptionId string, resourceGroupName string, serviceName string) <-chan AzureResult[azure.SpringApp]

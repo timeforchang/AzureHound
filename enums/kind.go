@@ -78,6 +78,7 @@ const (
 	KindAZWebAppRoleAssignment            Kind = "AZWebAppRoleAssignment"
 	KindAZManagedCluster                  Kind = "AZManagedCluster"
 	KindAZManagedClusterRoleAssignment    Kind = "AZManagedClusterRoleAssignment"
+	KindAZRBACRoleDefinition              Kind = "KindAZRBACRoleDefinition"
 	KindAZSpringApp                       Kind = "AZSpringApp"
 	KindAZSpringAppRoleAssignment         Kind = "KindAZSpringAppRoleAssignment"
 	KindAZSpringAppService                Kind = "AZSpringAppService"

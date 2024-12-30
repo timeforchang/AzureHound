@@ -388,6 +388,20 @@ func (mr *MockAzureClientMockRecorder) ListAzureManagementGroups(arg0, arg1 inte
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListAzureManagementGroups", reflect.TypeOf((*MockAzureClient)(nil).ListAzureManagementGroups), arg0, arg1)
 }
 
+// ListAzureRBACRoleDefinitions mocks base method.
+func (m *MockAzureClient) ListAzureRBACRoleDefinitions(arg0 context.Context, arg1 string) <-chan client.AzureResult[azure.RBACRoleDefinition] {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ListAzureRBACRoleDefinitions", arg0, arg1)
+	ret0, _ := ret[0].(<-chan client.AzureResult[azure.RBACRoleDefinition])
+	return ret0
+}
+
+// ListAzureRBACRoleDefinitions indicates an expected call of ListAzureRBACRoleDefinitions.
+func (mr *MockAzureClientMockRecorder) ListAzureRBACRoleDefinitions(arg0, arg1 interface{}) *gomock.Call {
+    mr.mock.ctrl.T.Helper()
+    return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListAzureRBACRoleDefinitions", reflect.TypeOf((*MockAzureClient)(nil).ListAzureRBACRoleDefinitions), arg0, arg1)
+}
+
 // ListAzureResourceGroups mocks base method.
 func (m *MockAzureClient) ListAzureResourceGroups(arg0 context.Context, arg1 string, arg2 query.RMParams) <-chan client.AzureResult[azure.ResourceGroup] {
 	m.ctrl.T.Helper()
