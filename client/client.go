@@ -207,6 +207,8 @@ type AzureResourceManagerClient interface {
 	ListAzureResourceGroups(ctx context.Context, subscriptionId string, params query.RMParams) <-chan AzureResult[azure.ResourceGroup]
 	ListAzureSubscriptions(ctx context.Context) <-chan AzureResult[azure.Subscription]
 	ListAzureVirtualMachines(ctx context.Context, subscriptionId string, params query.RMParams) <-chan AzureResult[azure.VirtualMachine]
+	ListAzureSpringApps(ctx context.Context, subscriptionId string, resourceGroupName string, serviceName string) <-chan AzureResult[azure.SpringApp]
+	ListAzureSpringAppServices(ctx context.Context, subscriptionId string) <-chan AzureResult[azure.SpringAppService]
 	ListAzureStorageAccounts(ctx context.Context, subscriptionId string) <-chan AzureResult[azure.StorageAccount]
 	ListAzureStorageContainers(ctx context.Context, subscriptionId string, resourceGroupName string, saName string, filter string, includeDeleted string, maxPageSize string) <-chan AzureResult[azure.StorageContainer]
 	ListAzureAutomationAccounts(ctx context.Context, subscriptionId string) <-chan AzureResult[azure.AutomationAccount]
