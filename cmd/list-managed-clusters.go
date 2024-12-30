@@ -106,6 +106,7 @@ func listManagedClusters(ctx context.Context, client client.AzureClient, subscri
 							ResourceGroupId: item.Ok.ResourceGroupId(),
 							TenantId:        client.TenantInfo().TenantId,
 						}
+						managedCluster.PopulateManagedIdentity()
 						log.V(2).Info("found managed cluster", "managedCluster", managedCluster)
 						count++
 						if ok := pipeline.SendAny(ctx.Done(), out, AzureWrapper{

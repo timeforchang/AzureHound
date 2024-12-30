@@ -20,5 +20,13 @@ package azure
 // Properties of the vault
 type ManagedClusterProperties struct {
 	// The name of the AzureRM Resource Group the Managed Cluster's Virtual Machine Scale Set resides
-	NodeResourceGroup string `json:"nodeResourceGroup,omitempty"`
+	AzurePortalFQDN         string                                        `json:"azurePortalFQDN,omitempty"`
+	EnableRBAC              bool                                          `json:"enableRBAC,omitempty"`
+	FQDN                    string                                        `json:"fqdn,omitempty"`
+	IdentityProfile         map[string]ManagedClusterUserAssignedIdentity `json:"identityProfile,omitempty"`
+	NodeResourceGroup       string                                        `json:"nodeResourceGroup,omitempty"`
+	PodIdentityProfile      ManagedClusterPodIdentityProfile              `json:"podIdentityProfile,omitempty"`
+	PublicNetworkAccess     string                                        `json:"publicNetworkAccess,omitempty"`
+	ServicePrincipalProfile ManagedClusterServicePrincipalProfile         `json:"servicePrincipalProfile,omitempty"`
+	WindowsProfile          ManagedClusterWindowsProfile                  `json:"windowsProfile,omitempty"`
 }

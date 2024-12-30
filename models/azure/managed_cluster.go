@@ -22,15 +22,22 @@ import "strings"
 type ManagedCluster struct {
 	Entity
 
-	ExtendedLocation ExtendedLocation         `json:"extendedLocation,omitempty"`
-	Identity         ManagedIdentity          `json:"identity,omitempty"`
-	Properties       ManagedClusterProperties `json:"properties,omitempty"`
-	Location         string                   `json:"location,omitempty"`
-	Name             string                   `json:"name,omitempty"`
-	Plan             Plan                     `json:"plan,omitempty"`
-	Tags             map[string]string        `json:"tags,omitempty"`
-	Type             string                   `json:"type,omitempty"`
-	Zones            []string                 `json:"zones,omitempty"`
+	ExtendedLocation ExtendedLocation              `json:"extendedLocation,omitempty"`
+	Identity         ManagedClusterManagedIdentity `json:"identity,omitempty"`
+	Properties       ManagedClusterProperties      `json:"properties,omitempty"`
+	Location         string                        `json:"location,omitempty"`
+	Name             string                        `json:"name,omitempty"`
+	Plan             Plan                          `json:"plan,omitempty"`
+	Tags             map[string]string             `json:"tags,omitempty"`
+	Type             string                        `json:"type,omitempty"`
+	Zones            []string                      `json:"zones,omitempty"`
+}
+
+func (s *ManagedCluster) PopulateManagedIdentity() {
+	if s.Properties.ServicePrincipalProfile != (ManagedClusterServicePrincipalProfile{}) {
+		s.Identity.ServicePrincipalProfile = s.Properties.ServicePrincipalProfile
+		s.Identity.IdentityProfile = s.Properties.IdentityProfile
+	}
 }
 
 func (s ManagedCluster) ResourceGroupName() string {

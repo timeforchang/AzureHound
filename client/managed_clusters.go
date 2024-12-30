@@ -30,7 +30,7 @@ func (s *azureClient) ListAzureManagedClusters(ctx context.Context, subscription
 	var (
 		out    = make(chan AzureResult[azure.ManagedCluster])
 		path   = fmt.Sprintf("/subscriptions/%s/providers/Microsoft.ContainerService/managedClusters", subscriptionId)
-		params = query.RMParams{ApiVersion: "2021-07-01"}
+		params = query.RMParams{ApiVersion: "2024-09-01"}
 	)
 
 	go getAzureObjectList[azure.ManagedCluster](s.resourceManager, ctx, path, params, out)
