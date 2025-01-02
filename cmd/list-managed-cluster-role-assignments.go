@@ -36,10 +36,10 @@ import (
 )
 
 func init() {
-	listRootCmd.AddCommand(listManagedClusterRoleAssignment)
+	listRootCmd.AddCommand(listManagedClusterRoleAssignmentCmd)
 }
 
-var listManagedClusterRoleAssignment = &cobra.Command{
+var listManagedClusterRoleAssignmentCmd = &cobra.Command{
 	Use:          "managed-cluster-role-assignments",
 	Long:         "Lists AKS Managed Cluster Role Assignments",
 	Run:          listManagedClusterRoleAssignmentImpl,

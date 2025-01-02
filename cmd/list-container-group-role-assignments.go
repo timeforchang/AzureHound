@@ -19,17 +19,17 @@ import (
 )
 
 func init() {
-	listRootCmd.AddCommand(listSpringAppServiceRoleAssignment)
+	listRootCmd.AddCommand(listContainerGroupRoleAssignmentCmd)
 }
 
-var listSpringAppServiceRoleAssignment = &cobra.Command{
-	Use:          "spring-app-service-role-assignments",
-	Long:         "Lists Azure Spring App Service Role Assignments",
-	Run:          listSpringAppServiceRoleAssignmentImpl,
+var listContainerGroupRoleAssignmentCmd = &cobra.Command{
+	Use:          "container-group-role-assignments",
+	Long:         "Lists Azure Container Group Service Role Assignments",
+	Run:          listContainerGroupRoleAssignmentsImpl,
 	SilenceUsage: true,
 }
 
-func listSpringAppServiceRoleAssignmentImpl(cmd *cobra.Command, args []string) {
+func listContainerGroupRoleAssignmentsImpl(cmd *cobra.Command, args []string) {
 	ctx, stop := signal.NotifyContext(cmd.Context(), os.Interrupt, os.Kill)
 	defer gracefulShutdown(stop)
 
@@ -39,10 +39,10 @@ func listSpringAppServiceRoleAssignmentImpl(cmd *cobra.Command, args []string) {
 	} else if azClient, err := newAzureClient(); err != nil {
 		exit(err)
 	} else {
-		log.Info("collecting azure spring app service role assignments...")
+		log.Info("collecting azure container group role assignments...")
 		start := time.Now()
 		subscriptions := listSubscriptions(ctx, azClient)
-		stream := listSpringAppServiceRoleAssignments(ctx, azClient, listSpringAppServices(ctx, azClient, subscriptions))
+		stream := listContainerGroupRoleAssignments(ctx, azClient, listContainerGroups(ctx, azClient, subscriptions))
 		panicrecovery.HandleBubbledPanic(ctx, stop, log)
 		outputStream(ctx, stream)
 		duration := time.Since(start)
@@ -50,7 +50,7 @@ func listSpringAppServiceRoleAssignmentImpl(cmd *cobra.Command, args []string) {
 	}
 }
 
-func listSpringAppServiceRoleAssignments(ctx context.Context, client client.AzureClient, springAppServices <-chan interface{}) <-chan interface{} {
+func listContainerGroupRoleAssignments(ctx context.Context, client client.AzureClient, containerGroups <-chan interface{}) <-chan interface{} {
 	var (
 		out     = make(chan interface{})
 		ids     = make(chan string)
@@ -62,12 +62,12 @@ func listSpringAppServiceRoleAssignments(ctx context.Context, client client.Azur
 		defer panicrecovery.PanicRecovery()
 		defer close(ids)
 
-		for result := range pipeline.OrDone(ctx.Done(), springAppServices) {
-			if springAppService, ok := result.(AzureWrapper).Data.(models.SpringAppService); !ok {
-				log.Error(fmt.Errorf("failed type assertion"), "unable to continue enumerating spring app service role assignments", "result", result)
+		for result := range pipeline.OrDone(ctx.Done(), containerGroups) {
+			if containerGroup, ok := result.(AzureWrapper).Data.(models.ContainerGroup); !ok {
+				log.Error(fmt.Errorf("failed type assertion"), "unable to continue enumerating container group role assignments", "result", result)
 				return
 			} else {
-				if ok := pipeline.Send(ctx.Done(), ids, springAppService.Id); !ok {
+				if ok := pipeline.Send(ctx.Done(), ids, containerGroup.Id); !ok {
 					return
 				}
 			}
@@ -82,34 +82,34 @@ func listSpringAppServiceRoleAssignments(ctx context.Context, client client.Azur
 			defer wg.Done()
 			for id := range stream {
 				var (
-					springAppServiceRoleAssignments = models.AzureRoleAssignments{
+					containerGroupRoleAssignments = models.AzureRoleAssignments{
 						ObjectId: id,
 					}
 					count = 0
 				)
 				for item := range client.ListRoleAssignmentsForResource(ctx, id, "", "") {
 					if item.Error != nil {
-						log.Error(item.Error, "unable to continue processing role assignments for this spring app service", "springAppServiceId", id)
+						log.Error(item.Error, "unable to continue processing role assignments for this container group", "containerGroupId", id)
 					} else {
 						roleDefinitionId := path.Base(item.Ok.Properties.RoleDefinitionId)
 
-						springAppServiceRoleAssignment := models.AzureRoleAssignment{
+						containerGroupRoleAssignment := models.AzureRoleAssignment{
 							Assignee:         item.Ok,
 							ObjectId:         id,
 							RoleDefinitionId: roleDefinitionId,
 						}
-						log.V(2).Info("found spring app role assignment", "SpringAppServiceAssignment", springAppServiceRoleAssignment)
+						log.V(2).Info("found container group role assignment", "containerGroupRoleAssignment", containerGroupRoleAssignment)
 						count++
-						springAppServiceRoleAssignments.RoleAssignments = append(springAppServiceRoleAssignments.RoleAssignments, springAppServiceRoleAssignment)
+						containerGroupRoleAssignments.RoleAssignments = append(containerGroupRoleAssignments.RoleAssignments, containerGroupRoleAssignment)
 					}
 				}
 				if ok := pipeline.SendAny(ctx.Done(), out, AzureWrapper{
-					Kind: enums.KindAZSpringAppServiceRoleAssignment,
-					Data: springAppServiceRoleAssignments,
+					Kind: enums.KindAZContainerGroupRoleAssignment,
+					Data: containerGroupRoleAssignments,
 				}); !ok {
 					return
 				}
-				log.V(1).Info("finished listing spring app service role assignments", "springAppServiceId", id, "count", count)
+				log.V(1).Info("finished listing container group role assignments", "containerGroupId", id, "count", count)
 			}
 		}()
 	}
@@ -117,7 +117,7 @@ func listSpringAppServiceRoleAssignments(ctx context.Context, client client.Azur
 	go func() {
 		wg.Wait()
 		close(out)
-		log.Info("finished listing all spring app service role assignments")
+		log.Info("finished listing all container group role assignments")
 	}()
 
 	return out
