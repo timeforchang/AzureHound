@@ -23,6 +23,26 @@
             "env": {},
             "args": ["list", "managed-clusters"],
             "showLog": true
+        },
+        {
+            "name": "List Subscription Role Assignments",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${workspaceRoot}",
+            "env": {},
+            "args": ["list", "subscription-role-assignments"],
+            "showLog": true
+        },
+        {
+            "name": "List All",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${workspaceRoot}",
+            "env": {},
+            "args": ["list"],
+            "showLog": true
         }
     ]
 }
