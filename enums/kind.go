@@ -63,7 +63,6 @@ const (
 	KindAZVMUserAccessAdmin                            Kind = "AZVMUserAccessAdmin"
 	KindAZVMVMContributor                              Kind = "AZVMVMContributor"
 	KindAZAppRoleAssignment                            Kind = "AZAppRoleAssignment"
-	KindAZUserAssignedManagedIdentity                  Kind = "AZSUserAssignedManagedIdentity"
 	KindAZStorageAccount                               Kind = "AZStorageAccount"
 	KindAZStorageAccountRoleAssignment                 Kind = "AZStorageAccountRoleAssignment"
 	KindAZStorageContainer                             Kind = "AZStorageContainer"

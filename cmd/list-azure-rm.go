@@ -145,7 +145,6 @@ func listAllRM(ctx context.Context, client client.AzureClient) <-chan interface{
 		subscriptions16              = make(chan interface{})
 		subscriptions17              = make(chan interface{})
 		subscriptions18              = make(chan interface{})
-		subscriptions19              = make(chan interface{})
 		subscriptionRoleAssignments  = make(chan interface{})
 		subscriptionRoleAssignments1 = make(chan interface{})
 		subscriptionRoleAssignments2 = make(chan interface{})
@@ -187,7 +186,6 @@ func listAllRM(ctx context.Context, client client.AzureClient) <-chan interface{
 		subscriptions16,
 		subscriptions17,
 		subscriptions18,
-		subscriptions19,
 	)
 	pipeline.Tee(ctx.Done(), listResourceGroups(ctx, client, subscriptions2), resourceGroups, resourceGroups2)
 	pipeline.Tee(ctx.Done(), listKeyVaults(ctx, client, subscriptions3), keyVaults, keyVaults2, keyVaults3)
@@ -235,8 +233,6 @@ func listAllRM(ctx context.Context, client client.AzureClient) <-chan interface{
 			resourceGroupRoleAssignments <- v
 		}
 	}()
-
-	userAssignedManagedIdentities := listUserAssignedManagedIdentities(ctx, client, subscriptions19)
 
 	// KeyVaults: AccessPolicies, Owners, UserAccessAdmins, Contributors and KVContributors
 	pipeline.Tee(ctx.Done(), listKeyVaultRoleAssignments(ctx, client, keyVaults2), keyVaultRoleAssignments1, keyVaultRoleAssignments2, keyVaultRoleAssignments3, keyVaultRoleAssignments4)

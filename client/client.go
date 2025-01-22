@@ -209,7 +209,6 @@ type AzureResourceManagerClient interface {
 	ListAzureRedHatOpenShiftClusters(ctx context.Context, subscriptionId string) <-chan AzureResult[azure.RedHatOpenShiftCluster]
 	ListAzureResourceGroups(ctx context.Context, subscriptionId string, params query.RMParams) <-chan AzureResult[azure.ResourceGroup]
 	ListAzureRBACRoleDefinitions(ctx context.Context, subscriptionId string) <-chan AzureResult[azure.RBACRoleDefinition]
-	ListAzureUserAssignedManagedIdentities(ctx context.Context, subscriptionId string) <-chan AzureResult[azure.UserAssignedIdentityModel]
 	ListAzureSubscriptions(ctx context.Context) <-chan AzureResult[azure.Subscription]
 	ListAzureVirtualMachines(ctx context.Context, subscriptionId string, params query.RMParams) <-chan AzureResult[azure.VirtualMachine]
 	ListAzureServiceFabricClusters(ctx context.Context, subscriptionId string) <-chan AzureResult[azure.ServiceFabricCluster]
