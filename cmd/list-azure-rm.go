@@ -361,7 +361,6 @@ func listAllRM(ctx context.Context, client client.AzureClient) <-chan interface{
 		subscriptionRoleAssignments,
 		subscriptionUserAccessAdmins,
 		subscriptions,
-		userAssignedManagedIdentities,
 		virtualMachineAdminLogins,
 		virtualMachineAvereContributors,
 		virtualMachineContributors,
