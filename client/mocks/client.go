@@ -430,6 +430,20 @@ func (mr *MockAzureClientMockRecorder) ListAzureRBACRoleDefinitions(arg0, arg1 i
     return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListAzureRBACRoleDefinitions", reflect.TypeOf((*MockAzureClient)(nil).ListAzureRBACRoleDefinitions), arg0, arg1)
 }
 
+// ListAzureUserAssignedManagedIdentities mocks base method.
+func (m *MockAzureClient) ListAzureUserAssignedManagedIdentities(arg0 context.Context, arg1 string) <-chan client.AzureResult[azure.UserAssignedIdentityModel] {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ListAzureUserAssignedManagedIdentities", arg0, arg1)
+	ret0, _ := ret[0].(<-chan client.AzureResult[azure.UserAssignedIdentityModel])
+	return ret0
+}
+
+// ListAzureUserAssignedManagedIdentities indicates an expected call of ListAzureUserAssignedManagedIdentities.
+func (mr *MockAzureClientMockRecorder) ListAzureUserAssignedManagedIdentities(arg0, arg1 interface{}) *gomock.Call {
+    mr.mock.ctrl.T.Helper()
+    return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListAzureUserAssignedManagedIdentities", reflect.TypeOf((*MockAzureClient)(nil).ListAzureUserAssignedManagedIdentities), arg0, arg1)
+}
+
 // ListAzureRedHatOpenShiftClusters mocks base method.
 func (m *MockAzureClient) ListAzureRedHatOpenShiftClusters(arg0 context.Context, arg1 string) <-chan client.AzureResult[azure.RedHatOpenShiftCluster] {
 	m.ctrl.T.Helper()

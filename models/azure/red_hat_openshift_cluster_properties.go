@@ -23,7 +23,7 @@ type RedHatOpenShiftClusterClusterProfile struct {
 }
 
 type RedHatOpenShiftClusterServicePrincipalProfile struct {
-	URL string `json:"url,omitempty"`
+	ClientId string `json:"clientId,omitempty"`
 }
 
 type RedHatOpenShiftClusterConsoleProfile struct {
