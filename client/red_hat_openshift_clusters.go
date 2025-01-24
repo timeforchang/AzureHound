@@ -25,15 +25,15 @@ import (
 	"github.com/bloodhoundad/azurehound/v2/models/azure"
 )
 
-// ListAzureManagedClusters https://learn.microsoft.com/en-us/rest/api/servicefabric/managedclusters/managed-clusters/list-by-subscription?view=rest-servicefabric-managedclusters-2021-07-01
-func (s *azureClient) ListAzureManagedClusters(ctx context.Context, subscriptionId string) <-chan AzureResult[azure.ManagedCluster] {
+// ListAzureRedHatOpenShiftCluster https://learn.microsoft.com/en-us/rest/api/openshift/open-shift-clusters/list?view=rest-openshift-2023-11-22
+func (s *azureClient) ListAzureRedHatOpenShiftClusters(ctx context.Context, subscriptionId string) <-chan AzureResult[azure.RedHatOpenShiftCluster] {
 	var (
-		out    = make(chan AzureResult[azure.ManagedCluster])
-		path   = fmt.Sprintf("/subscriptions/%s/providers/Microsoft.ContainerService/managedClusters", subscriptionId)
-		params = query.RMParams{ApiVersion: "2024-09-01"}
+		out    = make(chan AzureResult[azure.RedHatOpenShiftCluster])
+		path   = fmt.Sprintf("/subscriptions/%s/providers/Microsoft.RedHatOpenShift/openShiftClusters", subscriptionId)
+		params = query.RMParams{ApiVersion: "2023-11-22"}
 	)
 
-	go getAzureObjectList[azure.ManagedCluster](s.resourceManager, ctx, path, params, out)
+	go getAzureObjectList[azure.RedHatOpenShiftCluster](s.resourceManager, ctx, path, params, out)
 
 	return out
 }

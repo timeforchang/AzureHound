@@ -22,6 +22,7 @@ import (
 	"fmt"
 	"os"
 	"os/signal"
+	"strings"
 	"sync"
 	"time"
 
@@ -98,14 +99,15 @@ func listStorageContainers(ctx context.Context, client client.AzureClient, stora
 			defer wg.Done()
 			for stAccount := range stream {
 				count := 0
-				for item := range client.ListAzureStorageContainers(ctx, stAccount.(models.StorageAccount).SubscriptionId, stAccount.(models.StorageAccount).ResourceGroupName, stAccount.(models.StorageAccount).Name, "", "deleted", "") {
+				fixedSubscriptionId := strings.TrimPrefix(stAccount.(models.StorageAccount).SubscriptionId, "/subscriptions/")
+				for item := range client.ListAzureStorageContainers(ctx, fixedSubscriptionId, stAccount.(models.StorageAccount).ResourceGroupName, stAccount.(models.StorageAccount).Name, "", "deleted", "") {
 					if item.Error != nil {
 						log.Error(item.Error, "unable to continue processing storage containers for this subscription", "subscriptionId", stAccount.(models.StorageAccount).SubscriptionId, "storageAccountName", stAccount.(models.StorageAccount).Name)
 					} else {
 						storageContainer := models.StorageContainer{
 							StorageContainer:  item.Ok,
 							StorageAccountId:  stAccount.(models.StorageAccount).StorageAccount.Id,
-							SubscriptionId:    "/subscriptions/" + stAccount.(models.StorageAccount).SubscriptionId,
+							SubscriptionId:    stAccount.(models.StorageAccount).SubscriptionId,
 							ResourceGroupId:   item.Ok.ResourceGroupId(),
 							ResourceGroupName: item.Ok.ResourceGroupName(),
 							TenantId:          client.TenantInfo().TenantId,

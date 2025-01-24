@@ -1,20 +1,3 @@
-// Copyright (C) 2022 Specter Ops, Inc.
-//
-// This file is part of AzureHound.
-//
-// AzureHound is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// AzureHound is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
 package cmd
 
 import (
@@ -35,17 +18,17 @@ import (
 )
 
 func init() {
-	listRootCmd.AddCommand(listManagedClustersCmd)
+	listRootCmd.AddCommand(listContainerGroupsCmd)
 }
 
-var listManagedClustersCmd = &cobra.Command{
-	Use:          "managed-clusters",
-	Long:         "Lists Azure Kubernetes Service Managed Clusters",
-	Run:          listManagedClustersCmdImpl,
+var listContainerGroupsCmd = &cobra.Command{
+	Use:          "container-groups",
+	Long:         "Lists Azure Container Groups",
+	Run:          listContainerGroupsCmdImpl,
 	SilenceUsage: true,
 }
 
-func listManagedClustersCmdImpl(cmd *cobra.Command, args []string) {
+func listContainerGroupsCmdImpl(cmd *cobra.Command, args []string) {
 	ctx, stop := signal.NotifyContext(cmd.Context(), os.Interrupt, os.Kill)
 	defer gracefulShutdown(stop)
 
@@ -55,9 +38,9 @@ func listManagedClustersCmdImpl(cmd *cobra.Command, args []string) {
 	} else if azClient, err := newAzureClient(); err != nil {
 		exit(err)
 	} else {
-		log.Info("collecting azure managed clusters...")
+		log.Info("collecting azure container groups...")
 		start := time.Now()
-		stream := listManagedClusters(ctx, azClient, listSubscriptions(ctx, azClient))
+		stream := listContainerGroups(ctx, azClient, listSubscriptions(ctx, azClient))
 		panicrecovery.HandleBubbledPanic(ctx, stop, log)
 		outputStream(ctx, stream)
 		duration := time.Since(start)
@@ -65,7 +48,7 @@ func listManagedClustersCmdImpl(cmd *cobra.Command, args []string) {
 	}
 }
 
-func listManagedClusters(ctx context.Context, client client.AzureClient, subscriptions <-chan interface{}) <-chan interface{} {
+func listContainerGroups(ctx context.Context, client client.AzureClient, subscriptions <-chan interface{}) <-chan interface{} {
 	var (
 		out     = make(chan interface{})
 		ids     = make(chan string)
@@ -78,7 +61,7 @@ func listManagedClusters(ctx context.Context, client client.AzureClient, subscri
 		defer close(ids)
 		for result := range pipeline.OrDone(ctx.Done(), subscriptions) {
 			if subscription, ok := result.(AzureWrapper).Data.(models.Subscription); !ok {
-				log.Error(fmt.Errorf("failed type assertion"), "unable to continue enumerating managed clusters", "result", result)
+				log.Error(fmt.Errorf("failed type assertion"), "unable to continue enumerating container groups", "result", result)
 				return
 			} else {
 				if ok := pipeline.Send(ctx.Done(), ids, subscription.SubscriptionId); !ok {
@@ -96,28 +79,27 @@ func listManagedClusters(ctx context.Context, client client.AzureClient, subscri
 			defer wg.Done()
 			for id := range stream {
 				count := 0
-				for item := range client.ListAzureManagedClusters(ctx, id) {
+				for item := range client.ListAzureContainerGroups(ctx, id) {
 					if item.Error != nil {
-						log.Error(item.Error, "unable to continue processing managed clusters for this subscription", "subscriptionId", id)
+						log.Error(item.Error, "unable to continue processing container groups for this subscription", "subscriptionId", id)
 					} else {
-						managedCluster := models.ManagedCluster{
-							ManagedCluster:  item.Ok,
+						containerGroup := models.ContainerGroup{
+							ContainerGroup:  item.Ok,
 							SubscriptionId:  "/subscriptions/" + id,
 							ResourceGroupId: item.Ok.ResourceGroupId(),
 							TenantId:        client.TenantInfo().TenantId,
 						}
-						managedCluster.PopulateManagedIdentity()
-						log.V(2).Info("found managed cluster", "managedCluster", managedCluster)
+						log.V(2).Info("found container group", "containerGroup", containerGroup)
 						count++
 						if ok := pipeline.SendAny(ctx.Done(), out, AzureWrapper{
-							Kind: enums.KindAZManagedCluster,
-							Data: managedCluster,
+							Kind: enums.KindAZContainerGroup,
+							Data: containerGroup,
 						}); !ok {
 							return
 						}
 					}
 				}
-				log.V(1).Info("finished listing managed clusters", "subscriptionId", id, "count", count)
+				log.V(1).Info("finished listing container groups", "subscriptionId", id, "count", count)
 			}
 		}()
 	}
@@ -125,7 +107,7 @@ func listManagedClusters(ctx context.Context, client client.AzureClient, subscri
 	go func() {
 		wg.Wait()
 		close(out)
-		log.Info("finished listing all managed clusters")
+		log.Info("finished listing all container groups")
 	}()
 
 	return out

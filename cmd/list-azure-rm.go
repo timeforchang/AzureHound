@@ -74,6 +74,12 @@ func listAllRM(ctx context.Context, client client.AzureClient) <-chan interface{
 		automationAccounts  = make(chan interface{})
 		automationAccounts2 = make(chan interface{})
 
+		containerApps  = make(chan interface{})
+		containerApps2 = make(chan interface{})
+
+		containerGroups  = make(chan interface{})
+		containerGroups2 = make(chan interface{})
+
 		containerRegistries  = make(chan interface{})
 		containerRegistries2 = make(chan interface{})
 
@@ -104,6 +110,22 @@ func listAllRM(ctx context.Context, client client.AzureClient) <-chan interface{
 		resourceGroups2               = make(chan interface{})
 		resourceGroupRoleAssignments1 = make(chan azureWrapper[models.ResourceGroupRoleAssignments])
 		resourceGroupRoleAssignments2 = make(chan azureWrapper[models.ResourceGroupRoleAssignments])
+		resourceGroupRoleAssignments3 = make(chan azureWrapper[models.ResourceGroupRoleAssignments])
+
+		redHatOpenShiftClusters  = make(chan interface{})
+		redHatOpenShiftClusters2 = make(chan interface{})
+
+		serviceFabricClusters     = make(chan interface{})
+		serviceFabricClusters2    = make(chan interface{})
+		serviceFabricClusters3    = make(chan interface{})
+		serviceFabricClusterApps  = make(chan interface{})
+		serviceFabricClusterApps2 = make(chan interface{})
+
+		serviceFabricManagedClusters     = make(chan interface{})
+		serviceFabricManagedClusters2    = make(chan interface{})
+		serviceFabricManagedClusters3    = make(chan interface{})
+		serviceFabricManagedClusterApps  = make(chan interface{})
+		serviceFabricManagedClusterApps2 = make(chan interface{})
 
 		subscriptions                = make(chan interface{})
 		subscriptions2               = make(chan interface{})
@@ -117,8 +139,21 @@ func listAllRM(ctx context.Context, client client.AzureClient) <-chan interface{
 		subscriptions10              = make(chan interface{})
 		subscriptions11              = make(chan interface{})
 		subscriptions12              = make(chan interface{})
+		subscriptions13              = make(chan interface{})
+		subscriptions14              = make(chan interface{})
+		subscriptions15              = make(chan interface{})
+		subscriptions16              = make(chan interface{})
+		subscriptions17              = make(chan interface{})
+		subscriptions18              = make(chan interface{})
+		subscriptionRoleAssignments  = make(chan interface{})
 		subscriptionRoleAssignments1 = make(chan interface{})
 		subscriptionRoleAssignments2 = make(chan interface{})
+
+		springAppServices  = make(chan interface{})
+		springAppServices2 = make(chan interface{})
+		springAppServices3 = make(chan interface{})
+		springApps         = make(chan interface{})
+		springApps2        = make(chan interface{})
 
 		virtualMachines                = make(chan interface{})
 		virtualMachines2               = make(chan interface{})
@@ -127,6 +162,7 @@ func listAllRM(ctx context.Context, client client.AzureClient) <-chan interface{
 		virtualMachineRoleAssignments3 = make(chan azureWrapper[models.VirtualMachineRoleAssignments])
 		virtualMachineRoleAssignments4 = make(chan azureWrapper[models.VirtualMachineRoleAssignments])
 		virtualMachineRoleAssignments5 = make(chan azureWrapper[models.VirtualMachineRoleAssignments])
+		virtualMachineRoleAssignments6 = make(chan azureWrapper[models.VirtualMachineRoleAssignments])
 	)
 
 	// Enumerate entities
@@ -144,6 +180,12 @@ func listAllRM(ctx context.Context, client client.AzureClient) <-chan interface{
 		subscriptions10,
 		subscriptions11,
 		subscriptions12,
+		subscriptions13,
+		subscriptions14,
+		subscriptions15,
+		subscriptions16,
+		subscriptions17,
+		subscriptions18,
 	)
 	pipeline.Tee(ctx.Done(), listResourceGroups(ctx, client, subscriptions2), resourceGroups, resourceGroups2)
 	pipeline.Tee(ctx.Done(), listKeyVaults(ctx, client, subscriptions3), keyVaults, keyVaults2, keyVaults3)
@@ -155,6 +197,12 @@ func listAllRM(ctx context.Context, client client.AzureClient) <-chan interface{
 	pipeline.Tee(ctx.Done(), listLogicApps(ctx, client, subscriptions10), logicApps, logicApps2)
 	pipeline.Tee(ctx.Done(), listManagedClusters(ctx, client, subscriptions11), managedClusters, managedClusters2)
 	pipeline.Tee(ctx.Done(), listVMScaleSets(ctx, client, subscriptions12), vmScaleSets, vmScaleSets2)
+	pipeline.Tee(ctx.Done(), listSpringAppServices(ctx, client, subscriptions13), springAppServices, springAppServices2, springAppServices3)
+	pipeline.Tee(ctx.Done(), listContainerGroups(ctx, client, subscriptions14), containerGroups, containerGroups2)
+	pipeline.Tee(ctx.Done(), listServiceFabricClusters(ctx, client, subscriptions15), serviceFabricClusters, serviceFabricClusters2, serviceFabricClusters3)
+	pipeline.Tee(ctx.Done(), listServiceFabricManagedClusters(ctx, client, subscriptions16), serviceFabricManagedClusters, serviceFabricManagedClusters2, serviceFabricManagedClusters3)
+	pipeline.Tee(ctx.Done(), listRedHatOpenShiftClusters(ctx, client, subscriptions17), redHatOpenShiftClusters, redHatOpenShiftClusters2)
+	pipeline.Tee(ctx.Done(), listContainerApps(ctx, client, subscriptions18), containerApps, containerApps2)
 
 	// Enumerate Relationships
 	// ManagementGroups: Descendants, Owners and UserAccessAdmins
@@ -164,14 +212,27 @@ func listAllRM(ctx context.Context, client client.AzureClient) <-chan interface{
 	mgmtGroupUserAccessAdmins := listManagementGroupUserAccessAdmins(ctx, mgmtGroupRoleAssignments2)
 
 	// Subscriptions: Owners and UserAccessAdmins
-	pipeline.Tee(ctx.Done(), listSubscriptionRoleAssignments(ctx, client, subscriptions5), subscriptionRoleAssignments1, subscriptionRoleAssignments2)
+	pipeline.Tee(ctx.Done(), listSubscriptionRoleAssignments(ctx, client, subscriptions5),
+		subscriptionRoleAssignments,
+		subscriptionRoleAssignments1,
+		subscriptionRoleAssignments2)
 	subscriptionOwners := listSubscriptionOwners(ctx, client, subscriptionRoleAssignments1)
 	subscriptionUserAccessAdmins := listSubscriptionUserAccessAdmins(ctx, client, subscriptionRoleAssignments2)
 
 	// ResourceGroups: Owners and UserAccessAdmins
-	pipeline.Tee(ctx.Done(), listResourceGroupRoleAssignments(ctx, client, resourceGroups2), resourceGroupRoleAssignments1, resourceGroupRoleAssignments2)
+	pipeline.Tee(ctx.Done(), listResourceGroupRoleAssignments(ctx, client, resourceGroups2),
+		resourceGroupRoleAssignments1,
+		resourceGroupRoleAssignments2,
+		resourceGroupRoleAssignments3)
 	resourceGroupOwners := listResourceGroupOwners(ctx, resourceGroupRoleAssignments1)
 	resourceGroupUserAccessAdmins := listResourceGroupUserAccessAdmins(ctx, resourceGroupRoleAssignments2)
+	resourceGroupRoleAssignments := make(chan interface{})
+	go func() {
+		defer close(resourceGroupRoleAssignments)
+		for v := range resourceGroupRoleAssignments3 {
+			resourceGroupRoleAssignments <- v
+		}
+	}()
 
 	// KeyVaults: AccessPolicies, Owners, UserAccessAdmins, Contributors and KVContributors
 	pipeline.Tee(ctx.Done(), listKeyVaultRoleAssignments(ctx, client, keyVaults2), keyVaultRoleAssignments1, keyVaultRoleAssignments2, keyVaultRoleAssignments3, keyVaultRoleAssignments4)
@@ -182,12 +243,25 @@ func listAllRM(ctx context.Context, client client.AzureClient) <-chan interface{
 	keyVaultKVContributors := listKeyVaultKVContributors(ctx, keyVaultRoleAssignments4)
 
 	// VirtualMachines: Owners, AvereContributors, Contributors, AdminLogins and UserAccessAdmins
-	pipeline.Tee(ctx.Done(), listVirtualMachineRoleAssignments(ctx, client, virtualMachines2), virtualMachineRoleAssignments1, virtualMachineRoleAssignments2, virtualMachineRoleAssignments3, virtualMachineRoleAssignments4, virtualMachineRoleAssignments5)
+	pipeline.Tee(ctx.Done(), listVirtualMachineRoleAssignments(ctx, client, virtualMachines2),
+		virtualMachineRoleAssignments1,
+		virtualMachineRoleAssignments2,
+		virtualMachineRoleAssignments3,
+		virtualMachineRoleAssignments4,
+		virtualMachineRoleAssignments5,
+		virtualMachineRoleAssignments6)
 	virtualMachineOwners := listVirtualMachineOwners(ctx, virtualMachineRoleAssignments1)
 	virtualMachineAvereContributors := listVirtualMachineAvereContributors(ctx, virtualMachineRoleAssignments2)
 	virtualMachineContributors := listVirtualMachineContributors(ctx, virtualMachineRoleAssignments3)
 	virtualMachineAdminLogins := listVirtualMachineAdminLogins(ctx, virtualMachineRoleAssignments4)
 	virtualMachineUserAccessAdmins := listVirtualMachineUserAccessAdmins(ctx, virtualMachineRoleAssignments5)
+	virtualMachineRoleAssignments := make(chan interface{})
+	go func() {
+		defer close(virtualMachineRoleAssignments)
+		for v := range virtualMachineRoleAssignments6 {
+			virtualMachineRoleAssignments <- v
+		}
+	}()
 
 	// Enumerate Function App Role Assignments
 	functionAppRoleAssignments := listFunctionAppRoleAssignments(ctx, client, functionApps2)
@@ -210,9 +284,43 @@ func listAllRM(ctx context.Context, client client.AzureClient) <-chan interface{
 	// Enumerate VM Scale Set Role Assignments
 	vmScaleSetRoleAssignments := listVMScaleSetRoleAssignments(ctx, client, vmScaleSets2)
 
+	// Enumerate Spring App Service Role Assignments
+	springAppServiceRoleAssignments := listSpringAppServiceRoleAssignments(ctx, client, springAppServices2)
+
+	// Enumerate Spring Apps and their Role Assignments
+	pipeline.Tee(ctx.Done(), listSpringApps(ctx, client, springAppServices3), springApps, springApps2)
+	springAppRoleAssignments := listSpringAppRoleAssignments(ctx, client, springApps2)
+
+	// Enumerate Container Group Role Assignments
+	containerGroupRoleAssignments := listContainerGroupRoleAssignments(ctx, client, containerGroups2)
+
+	// Enumerate Service Fabric Cluster Role Assignments
+	serviceFabricClusterRoleAssignments := listServiceFabricClusterRoleAssignments(ctx, client, serviceFabricClusters2)
+
+	// Enumerate Service Fabric Cluster Apps and their Role Assignments
+	pipeline.Tee(ctx.Done(), listServiceFabricClusterApps(ctx, client, serviceFabricClusters3), serviceFabricClusterApps, serviceFabricClusterApps2)
+	serviceFabricClusterAppRoleAssignments := listServiceFabricClusterAppRoleAssignments(ctx, client, serviceFabricClusterApps2)
+
+	// Enumerate Service Fabric Managed Cluster Role Assignments
+	serviceFabricManagedClusterRoleAssignments := listServiceFabricManagedClusterRoleAssignments(ctx, client, serviceFabricManagedClusters2)
+
+	// Enumerate Service Fabric Managed Cluster Apps and their Role Assignments
+	pipeline.Tee(ctx.Done(), listServiceFabricManagedClusterApps(ctx, client, serviceFabricManagedClusters3), serviceFabricManagedClusterApps, serviceFabricManagedClusterApps2)
+	serviceFabricManagedClusterAppRoleAssignments := listServiceFabricManagedClusterAppRoleAssignments(ctx, client, serviceFabricManagedClusterApps2)
+
+	// Enumerate Red Hat OpenShift Cluster App Role Assignments
+	redHatOpenShiftClusterRoleAssignments := listRedHatOpenShiftClusterRoleAssignments(ctx, client, redHatOpenShiftClusters2)
+
+	// Enumerate Container App Role Assignments
+	containerAppRoleAssignments := listContainerAppRoleAssignments(ctx, client, containerApps2)
+
 	return pipeline.Mux(ctx.Done(),
 		automationAccounts,
 		automationAccountRoleAssignments,
+		containerApps,
+		containerAppRoleAssignments,
+		containerGroups,
+		containerGroupRoleAssignments,
 		containerRegistries,
 		containerRegistryRoleAssignments,
 		functionApps,
@@ -231,10 +339,26 @@ func listAllRM(ctx context.Context, client client.AzureClient) <-chan interface{
 		mgmtGroupOwners,
 		mgmtGroupUserAccessAdmins,
 		mgmtGroups,
+		redHatOpenShiftClusters,
+		redHatOpenShiftClusterRoleAssignments,
 		resourceGroupOwners,
 		resourceGroupUserAccessAdmins,
+		resourceGroupRoleAssignments,
 		resourceGroups,
+		serviceFabricClusters,
+		serviceFabricClusterRoleAssignments,
+		serviceFabricClusterApps,
+		serviceFabricClusterAppRoleAssignments,
+		serviceFabricManagedClusters,
+		serviceFabricManagedClusterRoleAssignments,
+		serviceFabricManagedClusterApps,
+		serviceFabricManagedClusterAppRoleAssignments,
+		springAppServices,
+		springAppServiceRoleAssignments,
+		springApps,
+		springAppRoleAssignments,
 		subscriptionOwners,
+		subscriptionRoleAssignments,
 		subscriptionUserAccessAdmins,
 		subscriptions,
 		virtualMachineAdminLogins,
@@ -242,6 +366,7 @@ func listAllRM(ctx context.Context, client client.AzureClient) <-chan interface{
 		virtualMachineContributors,
 		virtualMachineOwners,
 		virtualMachineUserAccessAdmins,
+		virtualMachineRoleAssignments,
 		virtualMachines,
 		vmScaleSets,
 		vmScaleSetRoleAssignments,

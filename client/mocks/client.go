@@ -262,6 +262,34 @@ func (mr *MockAzureClientMockRecorder) ListAzureAutomationAccounts(arg0, arg1 in
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListAzureAutomationAccounts", reflect.TypeOf((*MockAzureClient)(nil).ListAzureAutomationAccounts), arg0, arg1)
 }
 
+// ListAzureContainerApps mocks base method.
+func (m *MockAzureClient) ListAzureContainerApps(arg0 context.Context, arg1 string) <-chan client.AzureResult[azure.ContainerApp] {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ListAzureContainerApps", arg0, arg1)
+	ret0, _ := ret[0].(<-chan client.AzureResult[azure.ContainerApp])
+	return ret0
+}
+
+// ListAzureContainerApps indicates an expected call of ListAzureContainerApps.
+func (mr *MockAzureClientMockRecorder) ListAzureContainerApps(arg0, arg1 interface{}) *gomock.Call {
+    mr.mock.ctrl.T.Helper()
+    return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListAzureContainerApps", reflect.TypeOf((*MockAzureClient)(nil).ListAzureContainerApps), arg0, arg1)
+}
+
+// ListAzureContainerGroups mocks base method.
+func (m *MockAzureClient) ListAzureContainerGroups(arg0 context.Context, arg1 string) <-chan client.AzureResult[azure.ContainerGroup] {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ListAzureContainerGroups", arg0, arg1)
+	ret0, _ := ret[0].(<-chan client.AzureResult[azure.ContainerGroup])
+	return ret0
+}
+
+// ListAzureContainerGroups indicates an expected call of ListAzureContainerGroups.
+func (mr *MockAzureClientMockRecorder) ListAzureContainerGroups(arg0, arg1 interface{}) *gomock.Call {
+    mr.mock.ctrl.T.Helper()
+    return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListAzureContainerGroups", reflect.TypeOf((*MockAzureClient)(nil).ListAzureContainerGroups), arg0, arg1)
+}
+
 // ListAzureContainerRegistries mocks base method.
 func (m *MockAzureClient) ListAzureContainerRegistries(arg0 context.Context, arg1 string) <-chan client.AzureResult[azure.ContainerRegistry] {
 	m.ctrl.T.Helper()
@@ -388,6 +416,34 @@ func (mr *MockAzureClientMockRecorder) ListAzureManagementGroups(arg0, arg1 inte
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListAzureManagementGroups", reflect.TypeOf((*MockAzureClient)(nil).ListAzureManagementGroups), arg0, arg1)
 }
 
+// ListAzureRBACRoleDefinitions mocks base method.
+func (m *MockAzureClient) ListAzureRBACRoleDefinitions(arg0 context.Context, arg1 string) <-chan client.AzureResult[azure.RBACRoleDefinition] {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ListAzureRBACRoleDefinitions", arg0, arg1)
+	ret0, _ := ret[0].(<-chan client.AzureResult[azure.RBACRoleDefinition])
+	return ret0
+}
+
+// ListAzureRBACRoleDefinitions indicates an expected call of ListAzureRBACRoleDefinitions.
+func (mr *MockAzureClientMockRecorder) ListAzureRBACRoleDefinitions(arg0, arg1 interface{}) *gomock.Call {
+    mr.mock.ctrl.T.Helper()
+    return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListAzureRBACRoleDefinitions", reflect.TypeOf((*MockAzureClient)(nil).ListAzureRBACRoleDefinitions), arg0, arg1)
+}
+
+// ListAzureRedHatOpenShiftClusters mocks base method.
+func (m *MockAzureClient) ListAzureRedHatOpenShiftClusters(arg0 context.Context, arg1 string) <-chan client.AzureResult[azure.RedHatOpenShiftCluster] {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ListAzureRedHatOpenShiftClusters", arg0, arg1)
+	ret0, _ := ret[0].(<-chan client.AzureResult[azure.RedHatOpenShiftCluster])
+	return ret0
+}
+
+// ListAzureRedHatOpenShiftClusters indicates an expected call of ListAzureRedHatOpenShiftClusters.
+func (mr *MockAzureClientMockRecorder) ListAzureRedHatOpenShiftClusters(arg0, arg1 interface{}) *gomock.Call {
+    mr.mock.ctrl.T.Helper()
+    return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListAzureRedHatOpenShiftClusters", reflect.TypeOf((*MockAzureClient)(nil).ListAzureRedHatOpenShiftClusters), arg0, arg1)
+}
+
 // ListAzureResourceGroups mocks base method.
 func (m *MockAzureClient) ListAzureResourceGroups(arg0 context.Context, arg1 string, arg2 query.RMParams) <-chan client.AzureResult[azure.ResourceGroup] {
 	m.ctrl.T.Helper()
@@ -400,6 +456,90 @@ func (m *MockAzureClient) ListAzureResourceGroups(arg0 context.Context, arg1 str
 func (mr *MockAzureClientMockRecorder) ListAzureResourceGroups(arg0, arg1, arg2 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListAzureResourceGroups", reflect.TypeOf((*MockAzureClient)(nil).ListAzureResourceGroups), arg0, arg1, arg2)
+}
+
+// ListAzureServiceFabricClusters mocks base method.
+func (m *MockAzureClient) ListAzureServiceFabricClusters(arg0 context.Context, arg1 string) <-chan client.AzureResult[azure.ServiceFabricCluster] {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ListAzureServiceFabricClusters", arg0, arg1)
+	ret0, _ := ret[0].(<-chan client.AzureResult[azure.ServiceFabricCluster])
+	return ret0
+}
+
+// ListAzureServiceFabricClusters indicates an expected call of ListAzureServiceFabricClusters.
+func (mr *MockAzureClientMockRecorder) ListAzureServiceFabricClusters(arg0, arg1 interface{}) *gomock.Call {
+    mr.mock.ctrl.T.Helper()
+    return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListAzureServiceFabricClusters", reflect.TypeOf((*MockAzureClient)(nil).ListAzureServiceFabricClusters), arg0, arg1)
+}
+
+// ListAzureServiceFabricClusterApps mocks base method.
+func (m *MockAzureClient) ListAzureServiceFabricClusterApps(arg0 context.Context, arg1 string, arg2 string, arg3 string) <-chan client.AzureResult[azure.ServiceFabricClusterApp] {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ListAzureServiceFabricClusterApps", arg0, arg1, arg2, arg3)
+	ret0, _ := ret[0].(<-chan client.AzureResult[azure.ServiceFabricClusterApp])
+	return ret0
+}
+
+// ListAzureServiceFabricClusterApps indicates an expected call of ListAzureServiceFabricClusterApps.
+func (mr *MockAzureClientMockRecorder) ListAzureServiceFabricClusterApps(arg0, arg1, arg2, arg3 interface{}) *gomock.Call {
+    mr.mock.ctrl.T.Helper()
+    return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListAzureServiceFabricClusterApps", reflect.TypeOf((*MockAzureClient)(nil).ListAzureServiceFabricClusterApps), arg0, arg1, arg2, arg3)
+}
+
+// ListAzureServiceFabricManagedClusters mocks base method.
+func (m *MockAzureClient) ListAzureServiceFabricManagedClusters(arg0 context.Context, arg1 string) <-chan client.AzureResult[azure.ServiceFabricManagedCluster] {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ListAzureServiceFabricManagedClusters", arg0, arg1)
+	ret0, _ := ret[0].(<-chan client.AzureResult[azure.ServiceFabricManagedCluster])
+	return ret0
+}
+
+// ListAzureServiceFabricManagedClusters indicates an expected call of ListAzureServiceFabricManagedClusters.
+func (mr *MockAzureClientMockRecorder) ListAzureServiceFabricManagedClusters(arg0, arg1 interface{}) *gomock.Call {
+    mr.mock.ctrl.T.Helper()
+    return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListAzureServiceFabricManagedClusters", reflect.TypeOf((*MockAzureClient)(nil).ListAzureServiceFabricManagedClusters), arg0, arg1)
+}
+
+// ListAzureServiceFabricManagedClusterApps mocks base method.
+func (m *MockAzureClient) ListAzureServiceFabricManagedClusterApps(arg0 context.Context, arg1 string, arg2 string, arg3 string) <-chan client.AzureResult[azure.ServiceFabricManagedClusterApp] {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ListAzureServiceFabricManagedClusterApps", arg0, arg1, arg2, arg3)
+	ret0, _ := ret[0].(<-chan client.AzureResult[azure.ServiceFabricManagedClusterApp])
+	return ret0
+}
+
+// ListAzureServiceFabricManagedClusterApps indicates an expected call of ListAzureServiceFabricManagedClusterApps.
+func (mr *MockAzureClientMockRecorder) ListAzureServiceFabricManagedClusterApps(arg0, arg1, arg2, arg3 interface{}) *gomock.Call {
+    mr.mock.ctrl.T.Helper()
+    return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListAzureServiceFabricManagedClusterApps", reflect.TypeOf((*MockAzureClient)(nil).ListAzureServiceFabricManagedClusterApps), arg0, arg1, arg2, arg3)
+}
+
+// ListAzureSpringApps mocks base method.
+func (m *MockAzureClient) ListAzureSpringApps(arg0 context.Context, arg1 string, arg2 string, arg3 string) <-chan client.AzureResult[azure.SpringApp] {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ListAzureSpringApps", arg0, arg1, arg2, arg3)
+	ret0, _ := ret[0].(<-chan client.AzureResult[azure.SpringApp])
+	return ret0
+}
+
+// ListAzureSpringApps indicates an expected call of ListAzureSpringApps.
+func (mr *MockAzureClientMockRecorder) ListAzureSpringApps(arg0, arg1, arg2, arg3 interface{}) *gomock.Call {
+    mr.mock.ctrl.T.Helper()
+    return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListAzureSpringApps", reflect.TypeOf((*MockAzureClient)(nil).ListAzureSpringApps), arg0, arg1, arg2, arg3)
+}
+
+// ListAzureSpringAppServices mocks base method.
+func (m *MockAzureClient) ListAzureSpringAppServices(arg0 context.Context, arg1 string) <-chan client.AzureResult[azure.SpringAppService] {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ListAzureSpringAppServices", arg0, arg1)
+	ret0, _ := ret[0].(<-chan client.AzureResult[azure.SpringAppService])
+	return ret0
+}
+
+// ListAzureSpringAppServices indicates an expected call of ListAzureSpringApps.
+func (mr *MockAzureClientMockRecorder) ListAzureSpringAppServices(arg0, arg1 interface{}) *gomock.Call {
+    mr.mock.ctrl.T.Helper()
+    return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListAzureSpringAppServices", reflect.TypeOf((*MockAzureClient)(nil).ListAzureSpringAppServices), arg0, arg1)
 }
 
 // ListAzureStorageAccounts mocks base method.
