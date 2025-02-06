@@ -43,6 +43,16 @@
             "env": {},
             "args": ["list"],
             "showLog": true
+        },
+        {
+            "name": "List Apps",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${workspaceRoot}",
+            "env": {},
+            "args": ["list", "apps"],
+            "showLog": true
         }
     ]
 }
