@@ -221,10 +221,10 @@ tags
 ################
 
 .vscode/*
+.vscode/launch.json
 __debug_bin*
 !.vscode/settings.json
 !.vscode/tasks.json
-!.vscode/launch.json
 !.vscode/extensions.json
 !.vscode/*.code-snippets
 
@@ -233,3 +233,5 @@ __debug_bin*
 
 # Built Visual Studio Code Extensions
 *.vsix
+
+.go-version
